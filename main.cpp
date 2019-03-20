@@ -1,73 +1,83 @@
+// TODO: add name to every file
+
 #include <iostream>
 #include <map>
 #include <vector>
 #include <stdlib.h>
 #include <string>
+#include <cstdlib>
+#include <cstring>
+#include <fstream>
 
 #include "Cache.h"
 #include "CacheEntry.h"
 #include "CacheSet.h"
+#include "Util.h"
 
 #define PATH "C:\\Users\\crisc\\CLionProjects\\CacheSimulator\\addresses.dat"
-#define NUM_ARGS 7
 
 using namespace std;
 
-map<string, int>* verifyArgs(int argc, char** argv);
+bool debug = false;
+ofstream outputfile;
 
 int main(int argc, char** argv)
 {
-
-
-    map<string, int>* args = verifyArgs(argc, argv);
+    if(debug)
+    {
+        outputfile.open("debug_log.txt");
+        if(!outputfile)
+        {
+            cout << "Could not open output file" << endl;
+            return 1;
+        }
+    }
+    map<string, int>* args = verify_args(argc, argv);
     if(args == nullptr)
     {
-        cerr << "Improper command line arguments!";
+        cout << "Improper command line arguments!";
         return 1;
     }
 
+    Cache cache = Cache(args->at("-s"), args->at("-a"), args->at("-b"));
 
+    ifstream file;
+    file.open(R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\addresses.dat)");
+    if(!file)
+    {
+        cout << "Failed to open file!";
+        return 1;
+    }
+    string read_or_write;
+    int address;
+    while(file >> read_or_write >> address)
+    {
+        if(debug)
+        {
+            cout << read_or_write << " " << address << endl;
+            outputfile << read_or_write << " " << address << endl;
+        }
+        if(read_or_write == "r")
+        {
+            cache.readByte(address);
+        }
+        if(read_or_write == "w")
+        {
+            // TODO: change this for higher levels
+        }
+    }
 
+    //print summary
+    cout << "cache size: " << args->at("-s") << endl;
+    cout << "block size: " << args->at("-b") << endl;
+    cout << "associativity: " << args->at("-a") << endl;
+    cout << "total loads: " << cache.getMemoryReadCount() << endl;
+    cout << "total writes: " << cache.getMemoryWriteCount() << endl;
+    cout << "cache hits: " << cache.getHitCount() << endl;
+    cout << "cache misses " << cache.getMissCount() << endl;
+    cout << "miss rate: " << double(cache.getMissCount())/double(cache.getHitCount()) << " (misses per hit) " << endl;
 
+    delete args;
     return 0;
 }
 
-// Verify arguments are valid and return pointer to a map if they are
-map<string, int>* verifyArgs(int argc, char** argv)
-{
-    if(argc != NUM_ARGS)
-    {
-        return nullptr;
-    }
-    vector<string> options;
-    vector<int> values;
-
-    // make sure options are valid
-    for(size_t i = 1;i <= NUM_ARGS; i+=2)
-    {
-        if(argv[i] != "-s" && argv[i] != "-c" && argv[i] != "-b")
-        {
-            return nullptr;
-        }
-        options.push_back(argv[i]);
-    }
-    // make sure numbers are valid
-    for(size_t i = 2;i <= NUM_ARGS; i+=2)
-    {
-        char* temp;
-        int num = strtol(argv[i], &temp, 0);
-        if (temp == argv[i] || *temp)
-        {
-            return nullptr;
-        }
-        // TODO: verify args are powers of 2
-        values.push_back(num);
-    }
-
-    map<string, int>* args = new map<string, int>;
-    for(size_t i = 0;i<values.size();i++)
-    {
-        args->at(options[i]) = values[i];
-    }
-    return args;
-}

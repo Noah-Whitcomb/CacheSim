@@ -6,6 +6,7 @@
 #include <iostream>
 using namespace std;
 
+extern bool debug;
 
 class CacheEntry
 {
@@ -18,7 +19,7 @@ private:
 
 
 public:
-    CacheEntry(int lineSize=32);		// constructor with default linesize
+    CacheEntry(int lineSize=32);		// constructor with default line size
 
 
 //  hit()   returns true if a cache hit is made on the given tag

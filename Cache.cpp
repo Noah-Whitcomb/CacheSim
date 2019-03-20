@@ -1,14 +1,14 @@
 #include "Cache.h"
+#include "Util.h"
 using namespace std;
 
 
 //	constructor
 Cache::Cache(int setCount, int associativity, int lineSize)
 {
-
     for (int i=0; i<setCount; i++)
     {
-        cacheSets.push_back(CacheSet(lineSize, associativity));
+        cacheSets.emplace_back(CacheSet(lineSize, associativity));
     }
 
     number_of_sets = setCount;
@@ -63,19 +63,39 @@ bool Cache::readByte(int address)
 {
 // needs work!!
 
-    int tag,
-            setNumber,
-            offset;
+    int tag, setNumber, offset;
 
     splitAddress (address, tag, setNumber, offset);
 
+    if(debug)
+    {
+        cout << "set number: " << setNumber << endl;
+        outputfile << "set number: " << setNumber << " ";
+    }
+
+    cacheSets[setNumber].incMemoryReadCount();
+
     if (cacheSets[setNumber].hit(tag))
     {
-        cout << "DEBUG: have a HIT" << endl;
+        if(debug)
+        {
+            cout << "DEBUG: have a HIT" << endl;
+            outputfile << "HIT" << endl;
+        }
+        cacheSets[setNumber].incHitCount();
     }
     else
     {
-        cout << "DEBUG: have a MISS" << endl;
+        if(debug)
+        {
+            cout << "DEBUG: have a MISS" << endl;
+            outputfile << "MISS" << endl;
+        }
+        cacheSets[setNumber].incMissCount();
+        // the cache set we need to write to is setNumber
+        // for level 0, set size is 1 so reading is easy
+        cacheSets[setNumber].readByte(tag, offset);
+        // TODO add code to move address into cache (direct mapped)
     }
     return true;
 }
@@ -84,21 +104,41 @@ bool Cache::readByte(int address)
 
 int Cache::getHitCount()
 {
-    return 5;
+    int hitCount = 0;
+    for(size_t i = 0;i<cacheSets.size();i++)
+    {
+        hitCount += cacheSets[i].getHitCount();
+    }
+    return hitCount;
 }
 
 int Cache::getMissCount()
 {
-    return 5;
+    int missCount = 0;
+    for(size_t i = 0;i<cacheSets.size();i++)
+    {
+        missCount += cacheSets[i].getMissCount();
+    }
+    return missCount;
 }
 
 int Cache::getMemoryReadCount()
 {
-    return 5;
+    int memoryReadCount = 0;
+    for(size_t i = 0;i<cacheSets.size();i++)
+    {
+        memoryReadCount += cacheSets[i].getMemoryReadCount();
+    }
+    return memoryReadCount;
 }
 
 int Cache::getMemoryWriteCount()
 {
-    return 5;
+    int memoryWriteCount = 0;
+    for(size_t i = 0;i<cacheSets.size();i++)
+    {
+        memoryWriteCount += cacheSets[i].getMemoryWriteCount();
+    }
+    return memoryWriteCount;
 }
 

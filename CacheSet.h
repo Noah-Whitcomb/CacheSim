@@ -15,6 +15,8 @@ The CacheSet class is meant to simulate one set of CacheSet entries
 
 *************************************************************************************/
 
+extern ofstream outputfile;
+
 class CacheSet
 {
 private:
@@ -34,15 +36,19 @@ private:
 public:
     CacheSet(int lineSize=32, int Nway=4);
     bool	hit(int tag);
-    bool	readByte(int tag, int offset);		// return false if not in this set
-    bool	writeByte(int tag, int offset);	// return false if not in this set
+    bool	readByte(int tag, int offset);	// return false if not in this set
+    bool	writeByte(int tag, int offset); 	// return false if not in this set
     void	loadLine(int inputTag);		// simulate loading of a cache line
     // into this set; must decide which line
     // in this set to load
-    int  	getHitCount();
-    int  	getMissCount();
-    int	getMemoryReadCount();
-    int	getMemoryWriteCount();	// return number of memory writes
+    int  	getHitCount() {return hitCount;}
+    int  	getMissCount() {return missCount;}
+    int	getMemoryReadCount() {return memoryReadCount;}
+    int	getMemoryWriteCount() {return memoryWriteCount;}	// return number of memory writes
+    void incHitCount() {hitCount++;}
+    void incMissCount() {missCount++;}
+    void incMemoryReadCount() {memoryReadCount++;}
+    void incMemoryWriteCount() {memoryWriteCount++;}
 };
 
 #endif

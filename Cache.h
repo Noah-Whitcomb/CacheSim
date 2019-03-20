@@ -4,6 +4,8 @@
 #include "CacheSet.h"
 using namespace std;
 
+extern bool debug;
+extern ofstream outputfile;
 
 class Cache
 {
@@ -18,7 +20,7 @@ private:
     int 	bits_in_offset;		// computed, assumes line_size is a power of 2
 
 //	power_of_two returns the log base 2 of the input value.
-//		It the log is not an integer,
+//		If the log is not an integer,
 //		returns a negative value  of some kind.
     int	power_of_two(int value);
 

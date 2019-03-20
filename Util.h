@@ -10,10 +10,16 @@
 #include <cstdlib>
 #include <string>
 #include <cstring>
+#include <fstream>
 
 using namespace std;
 
-map<string, int>* verifyArgs(int argc, char** argv);
+//added boolean flag to easily control when things are printed
+//static bool debug = true;
+//static ofstream outputfile;
 
+map<string, int>* verify_args(int argc, char **argv);
+void writeToDebugFile(ofstream &output, int number);
+void writeToDebugFile(ofstream &output, string str);
 
 #endif //CACHESIMULATOR_UTIL_H

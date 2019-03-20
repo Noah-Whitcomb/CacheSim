@@ -1,10 +1,10 @@
 #include "Util.h"
 
-// defining num args so it can be changed in the future
+// defining number of arguments so it can be changed in the future
 #define NUM_ARGS 7
 
 // Verify arguments are valid and return pointer to a map if they are
-map<string, int>* verifyArgs(int argc, char** argv)
+map<string, int>* verify_args(int argc, char **argv)
 {
     if(argc != NUM_ARGS)
     {
@@ -27,7 +27,7 @@ map<string, int>* verifyArgs(int argc, char** argv)
                 }
             }
         }
-        options.push_back(argv[i]);
+        options.emplace_back(argv[i]);
     }
     // make sure numbers are valid
     for(size_t i = 2;i <= NUM_ARGS; i+=2)

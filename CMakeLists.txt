@@ -3,4 +3,4 @@ project(CacheSimulator)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(CacheSimulator main.cpp CacheEntry.h CacheSet.h Cache.h CacheEntry.cpp CacheSet.cpp Cache.cpp)
+add_executable(CacheSimulator main.cpp CacheEntry.h CacheSet.h Cache.h CacheEntry.cpp CacheSet.cpp Cache.cpp Util.cpp Util.h)

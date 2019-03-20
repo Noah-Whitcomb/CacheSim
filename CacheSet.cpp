@@ -15,7 +15,9 @@ CacheSet::CacheSet(int lineSize, int Nway)
     associativity_factor = Nway;
     // create a line for each entry in the set
     for (int i=0; i < Nway; i++)
-        cacheLine.push_back(CacheEntry(line_size));
+    {
+        cacheLine.emplace_back(CacheEntry(line_size));
+    }
 
     hitCount  = 0;
     missCount = 0;
@@ -28,12 +30,15 @@ CacheSet::CacheSet(int lineSize, int Nway)
 bool CacheSet::hit(int tag)
 {
     bool haveHit = false;
-    int  lineNumber;  	// for searching through the set
+    //int  lineNumber;  	// for searching through the set
 
 
     for (int lineNumber=0; lineNumber < associativity_factor; lineNumber ++)
-        if (cacheLine[lineNumber].hit(tag))
+    {
+        if (cacheLine[lineNumber].hit(tag)) {
             return true;
+        }
+    }
 
     return false;
 }
@@ -42,7 +47,17 @@ bool CacheSet::hit(int tag)
 
 bool CacheSet::readByte(int tag, int offset)
 {
-// to be implemented
+    // for level 0 the size of each set is 1
+    if(hit(tag) && cacheLine[0].readByte(offset))
+    {
+        return true;
+    }
+    else
+    {
+        loadLine(tag);
+        return false;
+    }
+
 }
 
 
@@ -53,34 +68,9 @@ bool CacheSet::writeByte(int tag, int offset)
 
 void CacheSet::loadLine(int inputTag)
 {
-// to be implemented
+    //TODO: change this to a loop for higher associativity factor (?)
+    cacheLine[0].loadLine(inputTag);
 }
 
-
-
-int CacheSet::getHitCount()
-{
-// to be implemented
-}
-
-
-
-int CacheSet::getMissCount()
-{
-// to be implemented
-}
-
-
-int CacheSet::getMemoryReadCount()
-{
-// to be implemented
-}
-
-
-
-int CacheSet::getMemoryWriteCount()
-{
-// to be implemented
-}
 
 
