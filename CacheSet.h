@@ -1,3 +1,4 @@
+// John Gaboriault-Whitcomb
 #ifndef CacheSet_h
 #define CacheSet_h
 

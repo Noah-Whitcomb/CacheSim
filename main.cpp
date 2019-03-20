@@ -1,4 +1,4 @@
-// TODO: add name to every file
+// John Gaboriault-Whitcomb
 
 #include <iostream>
 #include <map>
@@ -14,7 +14,7 @@
 #include "CacheSet.h"
 #include "Util.h"
 
-#define INPUT_PATH R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\addresses.dat)"
+#define INPUT_PATH R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\addresses_allsame.dat)"
 #define OUTPUT_PATH R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\debug_log.txt)"
 
 using namespace std;
