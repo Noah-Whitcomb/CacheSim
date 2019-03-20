@@ -71,11 +71,13 @@ bool Cache::readByte(int address)
     {
         cout << "set number: " << setNumber << endl;
         outputfile << "set number: " << setNumber << " ";
+        outputfile << "tag: " << tag << endl;
     }
 
     cacheSets[setNumber].incMemoryReadCount();
 
-    if (cacheSets[setNumber].hit(tag))
+    int garbage;
+    if (cacheSets[setNumber].hit(tag, garbage))
     {
         if(debug)
         {
@@ -92,11 +94,9 @@ bool Cache::readByte(int address)
             outputfile << "MISS" << endl;
         }
         cacheSets[setNumber].incMissCount();
-        // the cache set we need to write to is setNumber
-        // for level 0, set size is 1 so reading is easy
         cacheSets[setNumber].readByte(tag, offset);
-        // TODO add code to move address into cache (direct mapped)
     }
+    if(debug) outputfile << "#################" << endl;
     return true;
 }
 

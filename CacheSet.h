@@ -35,7 +35,7 @@ private:
 
 public:
     CacheSet(int lineSize=32, int Nway=4);
-    bool	hit(int tag);
+    bool	hit(int tag, int& indexOfHit);
     bool	readByte(int tag, int offset);	// return false if not in this set
     bool	writeByte(int tag, int offset); 	// return false if not in this set
     void	loadLine(int inputTag);		// simulate loading of a cache line

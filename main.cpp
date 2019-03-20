@@ -14,7 +14,8 @@
 #include "CacheSet.h"
 #include "Util.h"
 
-#define PATH "C:\\Users\\crisc\\CLionProjects\\CacheSimulator\\addresses.dat"
+#define INPUT_PATH R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\addresses.dat)"
+#define OUTPUT_PATH R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\debug_log.txt)"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ int main(int argc, char** argv)
 {
     if(debug)
     {
-        outputfile.open("debug_log.txt");
+        outputfile.open(OUTPUT_PATH);
         if(!outputfile)
         {
             cout << "Could not open output file" << endl;
@@ -42,7 +43,7 @@ int main(int argc, char** argv)
     Cache cache = Cache(args->at("-s"), args->at("-a"), args->at("-b"));
 
     ifstream file;
-    file.open(R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\addresses.dat)");
+    file.open(INPUT_PATH);
     if(!file)
     {
         cout << "Failed to open file!";

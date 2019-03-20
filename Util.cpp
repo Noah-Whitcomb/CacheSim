@@ -39,6 +39,7 @@ map<string, int>* verify_args(int argc, char **argv)
             return nullptr;
         }
         // TODO: verify args are powers of 2
+        // TODO: verify associativity vs size (?)
         values.push_back(num);
     }
 
