@@ -94,7 +94,6 @@ bool Cache::readByte(int address)
             outputfile << "MISS" << endl;
         }
         cacheSets[setNumber].incMissCount();
-        cacheSets[setNumber].readByte(tag, offset);
     }
     if(debug) outputfile << "#################" << endl;
     return true;
