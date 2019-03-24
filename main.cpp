@@ -76,7 +76,8 @@ int main(int argc, char** argv)
     cout << "total writes: " << cache.getMemoryWriteCount() << endl;
     cout << "cache hits: " << cache.getHitCount() << endl;
     cout << "cache misses " << cache.getMissCount() << endl;
-    cout << "miss rate: " << double(cache.getMissCount())/double(cache.getMemoryReadCount()) << " (misses/total reads) " << endl;
+    cout << "miss rate: " << double(cache.getMissCount())/double(cache.getMemoryReadCount() + cache.getMemoryWriteCount())
+        << " (misses/total reads) " << endl;
 
     delete args;
     return 0;

@@ -94,7 +94,6 @@ bool Cache::readByte(int address)
             outputfile << "MISS" << endl;
         }
         cacheSets[setNumber].incMissCount();
-        cacheSets[setNumber].readByte(tag, offset);
     }
     if(debug) outputfile << "#################" << endl;
     return true;
@@ -118,25 +117,24 @@ bool Cache::writeByte(int address)
 
     cacheSets[setNumber].incMemoryWriteCount();
 
-    int garbage;
-    if (cacheSets[setNumber].hit(tag, garbage))
+    if (cacheSets[setNumber].writeByte(tag, offset))
     {
         if(debug)
         {
-            cout << "DEBUG: have a HIT" << endl;
+            cout << "DEBUG: have a write HIT" << endl;
             outputfile << "HIT" << endl;
         }
         cacheSets[setNumber].incHitCount();
+        // TODO: set dirty of hit cacheEntry to true for level3
     }
     else
     {
         if(debug)
         {
-            cout << "DEBUG: have a MISS" << endl;
+            cout << "DEBUG: have a write MISS" << endl;
             outputfile << "MISS" << endl;
         }
         cacheSets[setNumber].incMissCount();
-        cacheSets[setNumber].readByte(tag, offset);
     }
     if(debug) outputfile << "#################" << endl;
     return true;
