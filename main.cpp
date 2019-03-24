@@ -64,7 +64,7 @@ int main(int argc, char** argv)
         }
         if(read_or_write == "w")
         {
-            // TODO: change this for higher levels
+            cache.writeByte(address);
         }
     }
 

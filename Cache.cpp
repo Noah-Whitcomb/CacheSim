@@ -100,7 +100,47 @@ bool Cache::readByte(int address)
     return true;
 }
 
+// return true if value is already in cache
+// we don't have to worry about dirty for write through
+// because data is written to main memory and cache
+bool Cache::writeByte(int address)
+{
+    int tag, setNumber, offset;
 
+    splitAddress (address, tag, setNumber, offset);
+
+    if(debug)
+    {
+        cout << "set number: " << setNumber << endl;
+        outputfile << "set number: " << setNumber << " ";
+        outputfile << "tag: " << tag << endl;
+    }
+
+    cacheSets[setNumber].incMemoryWriteCount();
+
+    int garbage;
+    if (cacheSets[setNumber].hit(tag, garbage))
+    {
+        if(debug)
+        {
+            cout << "DEBUG: have a HIT" << endl;
+            outputfile << "HIT" << endl;
+        }
+        cacheSets[setNumber].incHitCount();
+    }
+    else
+    {
+        if(debug)
+        {
+            cout << "DEBUG: have a MISS" << endl;
+            outputfile << "MISS" << endl;
+        }
+        cacheSets[setNumber].incMissCount();
+        cacheSets[setNumber].readByte(tag, offset);
+    }
+    if(debug) outputfile << "#################" << endl;
+    return true;
+}
 
 int Cache::getHitCount()
 {
