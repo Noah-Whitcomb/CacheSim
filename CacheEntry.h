@@ -1,5 +1,5 @@
+// John Gaboriault-Whitcomb
 // header file for cache Entry for CSCI 5814 Spring 2010
-
 #ifndef cacheEntry_h
 #define cacheEntry_h
 #include <ostream>

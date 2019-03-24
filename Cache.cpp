@@ -1,3 +1,4 @@
+// John Gaboriault-Whitcomb
 #include "Cache.h"
 #include "Util.h"
 using namespace std;
@@ -76,8 +77,7 @@ bool Cache::readByte(int address)
 
     cacheSets[setNumber].incMemoryReadCount();
 
-    int garbage;
-    if (cacheSets[setNumber].hit(tag, garbage))
+    if (cacheSets[setNumber].readByte(tag, offset))
     {
         if(debug)
         {

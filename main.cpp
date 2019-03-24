@@ -1,4 +1,4 @@
-// TODO: add name to every file
+// John Gaboriault-Whitcomb
 
 #include <iostream>
 #include <map>
@@ -14,8 +14,8 @@
 #include "CacheSet.h"
 #include "Util.h"
 
-#define INPUT_PATH R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\addresses.dat)"
-#define OUTPUT_PATH R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\debug_log.txt)"
+#define INPUT_PATH "addresses.dat"
+#define OUTPUT_PATH "debug_log.txt"
 
 using namespace std;
 
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
     cout << "total writes: " << cache.getMemoryWriteCount() << endl;
     cout << "cache hits: " << cache.getHitCount() << endl;
     cout << "cache misses " << cache.getMissCount() << endl;
-    cout << "miss rate: " << double(cache.getMissCount())/double(cache.getHitCount()) << " (misses per hit) " << endl;
+    cout << "miss rate: " << double(cache.getMissCount())/double(cache.getMemoryReadCount()) << " (misses/total reads) " << endl;
 
     delete args;
     return 0;

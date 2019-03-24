@@ -1,4 +1,4 @@
-
+// John Gaboriault-Whitcomb
 #include "CacheSet.h"
 using namespace std;
 
@@ -49,13 +49,13 @@ bool CacheSet::hit(int tag, int& indexOfHit)
 
 bool CacheSet::readByte(int tag, int offset)
 {
-    // for level 0 the size of each set is 1
-    // for set associative cache there are multiple options per set
     // if there is a hit, return true
     // if not, load byte into the least recently used block
     int indexofHit;
-    if(hit(tag, indexofHit) && cacheLine[indexofHit].readByte(offset))
+    if(hit(tag, indexofHit))
     {
+        // reset the LRU counter of the recently hit cacheEntry
+        // increment all other counters
         for(size_t i = 0;i<cacheLine.size();i++)
         {
             if(i == indexofHit)
@@ -71,7 +71,7 @@ bool CacheSet::readByte(int tag, int offset)
     }
     else
     {
-        loadLine(tag);
+        loadLine(tag, offset);
         return false;
     }
 
@@ -83,7 +83,7 @@ bool CacheSet::writeByte(int tag, int offset)
 // to be implemented
 }
 
-void CacheSet::loadLine(int inputTag)
+void CacheSet::loadLine(int inputTag, int offset)
 {
     // figure out which line to write to based on LRU
     int leastRecentlyUsed = cacheLine[0].getLRU_counter();
@@ -96,7 +96,10 @@ void CacheSet::loadLine(int inputTag)
             indexToReplace = i;
         }
     }
-    cacheLine[indexToReplace].loadLine(inputTag);
+    if(cacheLine[indexToReplace].readByte(offset))
+    {
+        cacheLine[indexToReplace].loadLine(inputTag);
+    }
 
     // take care of all LRU counters
     for(size_t i = 0;i<cacheLine.size();i++)

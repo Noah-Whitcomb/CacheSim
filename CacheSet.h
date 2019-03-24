@@ -1,3 +1,4 @@
+// John Gaboriault-Whitcomb
 #ifndef CacheSet_h
 #define CacheSet_h
 
@@ -38,7 +39,7 @@ public:
     bool	hit(int tag, int& indexOfHit);
     bool	readByte(int tag, int offset);	// return false if not in this set
     bool	writeByte(int tag, int offset); 	// return false if not in this set
-    void	loadLine(int inputTag);		// simulate loading of a cache line
+    void	loadLine(int inputTag, int offset);		// simulate loading of a cache line
     // into this set; must decide which line
     // in this set to load
     int  	getHitCount() {return hitCount;}

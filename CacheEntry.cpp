@@ -1,3 +1,4 @@
+// John Gaboriault-Whitcomb
 #include <ostream>
 #include <iostream>
 #include <cstdlib>
