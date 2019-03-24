@@ -1,3 +1,4 @@
+//John Gaboriault-Whitcomb
 #ifndef CacheSet_h
 #define CacheSet_h
 
@@ -14,8 +15,6 @@ The CacheSet class is meant to simulate one set of CacheSet entries
 		(in an N-way CacheSet)
 
 *************************************************************************************/
-
-extern ofstream outputfile;
 
 class CacheSet
 {

@@ -1,5 +1,5 @@
 // header file for cache Entry for CSCI 5814 Spring 2010
-
+//John Gaboriault-Whitcomb
 #ifndef cacheEntry_h
 #define cacheEntry_h
 #include <ostream>
@@ -7,6 +7,8 @@
 using namespace std;
 
 extern bool debug;
+extern bool write_to_file;
+extern ofstream outputfile;
 
 class CacheEntry
 {

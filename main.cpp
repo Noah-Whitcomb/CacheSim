@@ -1,4 +1,4 @@
-// TODO: add name to every file
+// John Gaboriault-Whitcomb
 
 #include <iostream>
 #include <map>
@@ -14,21 +14,23 @@
 #include "CacheSet.h"
 #include "Util.h"
 
-#define PATH "C:\\Users\\crisc\\CLionProjects\\CacheSimulator\\addresses.dat"
+#define INPUT_FILE "allsameset_addressonly.txt"
+#define OUTPUT_FILE "debug_log.txt"
 
 using namespace std;
 
 bool debug = false;
+bool write_to_file = false;
 ofstream outputfile;
 
 int main(int argc, char** argv)
 {
-    if(debug)
+    if(write_to_file)
     {
-        outputfile.open("debug_log.txt");
+        outputfile.open(OUTPUT_FILE);
         if(!outputfile)
         {
-            cout << "Could not open output file" << endl;
+            cout << "Could not open write_to_file file" << endl;
             return 1;
         }
     }
@@ -42,7 +44,7 @@ int main(int argc, char** argv)
     Cache cache = Cache(args->at("-s"), args->at("-a"), args->at("-b"));
 
     ifstream file;
-    file.open(R"(C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\addresses.dat)");
+    file.open(INPUT_FILE);
     if(!file)
     {
         cout << "Failed to open file!";
@@ -52,13 +54,11 @@ int main(int argc, char** argv)
     int address;
     while(file >> read_or_write >> address)
     {
-        if(debug)
-        {
-            cout << read_or_write << " " << address << endl;
-            outputfile << read_or_write << " " << address << endl;
-        }
+
         if(read_or_write == "r")
         {
+            if(debug) cout << read_or_write << " " << address << endl;
+            if(write_to_file) outputfile << read_or_write << " " << address << endl;
             cache.readByte(address);
         }
         if(read_or_write == "w")
@@ -66,7 +66,6 @@ int main(int argc, char** argv)
             // TODO: change this for higher levels
         }
     }
-
     //print summary
     cout << "cache size: " << args->at("-s") << endl;
     cout << "block size: " << args->at("-b") << endl;
@@ -75,7 +74,7 @@ int main(int argc, char** argv)
     cout << "total writes: " << cache.getMemoryWriteCount() << endl;
     cout << "cache hits: " << cache.getHitCount() << endl;
     cout << "cache misses " << cache.getMissCount() << endl;
-    cout << "miss rate: " << double(cache.getMissCount())/double(cache.getHitCount()) << " (misses per hit) " << endl;
+    cout << "miss rate: " << double(cache.getMissCount())/double(cache.getMemoryReadCount()) << endl;
 
     delete args;
     return 0;

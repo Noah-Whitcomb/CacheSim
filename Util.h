@@ -1,7 +1,4 @@
-//
-// Created by crisc on 3/18/2019.
-//
-
+// John Gaboriault-Whitcomb
 #ifndef CACHESIMULATOR_UTIL_H
 #define CACHESIMULATOR_UTIL_H
 

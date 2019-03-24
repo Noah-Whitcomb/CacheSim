@@ -1,3 +1,4 @@
+//John Gaboriault-Whitcomb
 #include "Cache.h"
 #include "Util.h"
 using namespace std;
@@ -8,7 +9,7 @@ Cache::Cache(int setCount, int associativity, int lineSize)
 {
     for (int i=0; i<setCount; i++)
     {
-        cacheSets.emplace_back(CacheSet(lineSize, associativity));
+        cacheSets.push_back(CacheSet(lineSize, associativity));
     }
 
     number_of_sets = setCount;
@@ -67,35 +68,29 @@ bool Cache::readByte(int address)
 
     splitAddress (address, tag, setNumber, offset);
 
-    if(debug)
+    if(debug) cout << "set number: " << setNumber << endl;
+    if(write_to_file)
     {
-        cout << "set number: " << setNumber << endl;
         outputfile << "set number: " << setNumber << " ";
+        outputfile << " tag: " << tag << " " << "address: " << address << endl;
     }
 
+    // increment read count, this is done for every single read
     cacheSets[setNumber].incMemoryReadCount();
 
-    if (cacheSets[setNumber].hit(tag))
+    if (cacheSets[setNumber].readByte(tag, offset))
     {
-        if(debug)
-        {
-            cout << "DEBUG: have a HIT" << endl;
-            outputfile << "HIT" << endl;
-        }
+        if(debug) cout << "DEBUG: have a HIT" << endl;
+        if(write_to_file) outputfile << "HIT" << endl;
         cacheSets[setNumber].incHitCount();
     }
     else
     {
-        if(debug)
-        {
-            cout << "DEBUG: have a MISS" << endl;
-            outputfile << "MISS" << endl;
-        }
+        if(debug) cout << "DEBUG: have a MISS" << endl;
+        if(write_to_file) outputfile << "MISS" << endl << "##########" << endl;
+        // since there was a miss, increment the miss count
+        // and load the line into cache (done in readByte)
         cacheSets[setNumber].incMissCount();
-        // the cache set we need to write to is setNumber
-        // for level 0, set size is 1 so reading is easy
-        cacheSets[setNumber].readByte(tag, offset);
-        // TODO add code to move address into cache (direct mapped)
     }
     return true;
 }

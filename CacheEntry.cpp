@@ -1,3 +1,4 @@
+//John Gaboriault-Whitcomb
 #include <ostream>
 #include <iostream>
 #include <cstdlib>
@@ -25,6 +26,7 @@ CacheEntry::CacheEntry(int newLineSize)
 
 bool CacheEntry::hit(int testTag) const
 {
+    //if(valid && tag == testTag) cout << tag << " " << testTag << endl;
     return (valid && tag == testTag);
 }
 

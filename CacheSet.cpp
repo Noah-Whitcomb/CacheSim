@@ -1,4 +1,4 @@
-
+//John Gaboriault-Whitcomb
 #include "CacheSet.h"
 using namespace std;
 
@@ -16,7 +16,7 @@ CacheSet::CacheSet(int lineSize, int Nway)
     // create a line for each entry in the set
     for (int i=0; i < Nway; i++)
     {
-        cacheLine.emplace_back(CacheEntry(line_size));
+        cacheLine.push_back(CacheEntry(line_size));
     }
 
     hitCount  = 0;
@@ -47,19 +47,16 @@ bool CacheSet::hit(int tag)
 
 bool CacheSet::readByte(int tag, int offset)
 {
-    // for level 0 the size of each set is 1
-    if(hit(tag) && cacheLine[0].readByte(offset))
+    if(hit(tag))
     {
         return true;
     }
-    else
+    else if(cacheLine[0].readByte(offset))
     {
         loadLine(tag);
-        return false;
     }
-
+    return false;
 }
-
 
 bool CacheSet::writeByte(int tag, int offset)
 {
@@ -68,7 +65,7 @@ bool CacheSet::writeByte(int tag, int offset)
 
 void CacheSet::loadLine(int inputTag)
 {
-    //TODO: change this to a loop for higher associativity factor (?)
+    //TODO: change this for higher associativity factor
     cacheLine[0].loadLine(inputTag);
 }
 
