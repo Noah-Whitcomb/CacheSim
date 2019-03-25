@@ -125,7 +125,6 @@ bool Cache::writeByte(int address)
             outputfile << "HIT" << endl;
         }
         cacheSets[setNumber].incHitCount();
-        // TODO: set dirty of hit cacheEntry to true for level3
     }
     else
     {

@@ -80,7 +80,32 @@ bool CacheSet::readByte(int tag, int offset)
 
 bool CacheSet::writeByte(int tag, int offset)
 {
-// to be implemented
+    int indexofHit;
+    if(hit(tag, indexofHit))
+    {
+        // reset the LRU counter of the recently hit cacheEntry
+        // increment all other counters
+        // this stays the same for writes - you are likely
+        // to use data you just wrote
+        // TODO: set dirty to true for level 3
+        for(size_t i = 0;i<cacheLine.size();i++)
+        {
+            if(i == indexofHit)
+            {
+                cacheLine[i].setLRU_counter(0);
+            }
+            else
+            {
+                cacheLine[i].incLRU_counter();
+            }
+        }
+        return true;
+    }
+    else
+    {
+        loadLine(tag, offset);
+        return false;
+    }
 }
 
 void CacheSet::loadLine(int inputTag, int offset)
@@ -96,15 +121,20 @@ void CacheSet::loadLine(int inputTag, int offset)
             indexToReplace = i;
         }
     }
+
+    // loadline if space permits (it always will)
+    bool did_write = false;
     if(cacheLine[indexToReplace].readByte(offset))
     {
+        // TODO: set dirty to true for level 3
         cacheLine[indexToReplace].loadLine(inputTag);
+        did_write = true;
     }
 
     // take care of all LRU counters
     for(size_t i = 0;i<cacheLine.size();i++)
     {
-        if(i == indexToReplace)
+        if(i == indexToReplace && did_write)
         {
             cacheLine[indexToReplace].setLRU_counter(0);
         }
