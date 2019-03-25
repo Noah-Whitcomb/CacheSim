@@ -14,7 +14,7 @@
 #include "CacheSet.h"
 #include "Util.h"
 
-#define INPUT_FILE "allsameset_addressonly.txt"
+#define INPUT_FILE "addresses.dat"
 #define OUTPUT_FILE "debug_log.txt"
 
 using namespace std;
@@ -34,6 +34,7 @@ int main(int argc, char** argv)
             return 1;
         }
     }
+
     map<string, int>* args = verify_args(argc, argv);
     if(args == nullptr)
     {
@@ -41,7 +42,10 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    Cache cache = Cache(args->at("-s"), args->at("-a"), args->at("-b"));
+    int numlines = args->at("-a")*args->at("-b");
+    int numsets = args->at("-s")/numlines;
+
+    Cache cache = Cache(numsets, args->at("-a"), args->at("-b"));
 
     ifstream file;
     file.open(INPUT_FILE);
@@ -67,7 +71,7 @@ int main(int argc, char** argv)
         }
     }
     //print summary
-    cout << "cache size: " << args->at("-s") << endl;
+    cout << "cache size: " << numsets << endl;
     cout << "block size: " << args->at("-b") << endl;
     cout << "associativity: " << args->at("-a") << endl;
     cout << "total loads: " << cache.getMemoryReadCount() << endl;
