@@ -34,9 +34,8 @@ bool CacheSet::hit(int tag, int& indexOfHit)
 
     for (int lineNumber=0; lineNumber < associativity_factor; lineNumber ++)
     {
-        if (cacheLine[lineNumber].hit(tag) && !cacheLine[lineNumber].isDirty()) {
+        if (cacheLine[lineNumber].hit(tag)) {
             indexOfHit = lineNumber;
-            cacheLine[lineNumber].setLRU_counter(0);
             return true;
         }
     }
