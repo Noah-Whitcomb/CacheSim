@@ -42,8 +42,8 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    int numlines = args->at("-a")*args->at("-b");
-    int numsets = args->at("-s")/numlines;
+    int numlines = args->at("-a")*args->at("-b"); // units are bytes
+    int numsets = args->at("-s")/numlines; // no units
 
     Cache cache = Cache(numsets, args->at("-a"), args->at("-b"));
 
