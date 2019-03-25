@@ -99,9 +99,6 @@ bool Cache::readByte(int address)
     return true;
 }
 
-// return true if value is already in cache
-// we don't have to worry about dirty for write through
-// because data is written to main memory and cache
 bool Cache::writeByte(int address)
 {
     int tag, setNumber, offset;

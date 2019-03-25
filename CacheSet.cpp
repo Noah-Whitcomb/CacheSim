@@ -32,10 +32,9 @@ bool CacheSet::hit(int tag, int& indexOfHit)
     bool haveHit = false;
     //int  lineNumber;  	// for searching through the set
 
-
     for (int lineNumber=0; lineNumber < associativity_factor; lineNumber ++)
     {
-        if (cacheLine[lineNumber].hit(tag)) {
+        if (cacheLine[lineNumber].hit(tag) && !cacheLine[lineNumber].isDirty()) {
             indexOfHit = lineNumber;
             cacheLine[lineNumber].setLRU_counter(0);
             return true;
@@ -44,7 +43,6 @@ bool CacheSet::hit(int tag, int& indexOfHit)
 
     return false;
 }
-
 
 
 bool CacheSet::readByte(int tag, int offset)
@@ -71,7 +69,7 @@ bool CacheSet::readByte(int tag, int offset)
     }
     else
     {
-        loadLine(tag, offset);
+        loadLine(tag, offset, false);
         return false;
     }
 
@@ -87,7 +85,6 @@ bool CacheSet::writeByte(int tag, int offset)
         // increment all other counters
         // this stays the same for writes - you are likely
         // to use data you just wrote
-        // TODO: set dirty to true for level 3
         for(size_t i = 0;i<cacheLine.size();i++)
         {
             if(i == indexofHit)
@@ -99,18 +96,21 @@ bool CacheSet::writeByte(int tag, int offset)
                 cacheLine[i].incLRU_counter();
             }
         }
+        // if there is a hit, set the block to dirty
+        // this makes sure it is written to main memory before being replaced
+        cacheLine[indexofHit].setDirty();
         return true;
     }
     else
     {
-        loadLine(tag, offset);
+        loadLine(tag, offset, true);
         return false;
     }
 }
 
-void CacheSet::loadLine(int inputTag, int offset)
+void CacheSet::loadLine(int inputTag, int offset, bool write)
 {
-    // figure out which line to write to based on LRU
+    // figure out which line to load to based on LRU
     int leastRecentlyUsed = cacheLine[0].getLRU_counter();
     int indexToReplace = 0;
     for(size_t i = 0;i<cacheLine.size();i++)
@@ -126,9 +126,24 @@ void CacheSet::loadLine(int inputTag, int offset)
     bool did_write = false;
     if(cacheLine[indexToReplace].readByte(offset))
     {
-        // TODO: set dirty to true for level 3
+        if(cacheLine[indexToReplace].isDirty())
+        {
+            // write this block back to main memory before replacing it
+            // there isn't a main memory in this project so nothing happens here
+        }
         cacheLine[indexToReplace].loadLine(inputTag);
         did_write = true;
+
+        // if this load is a write, set dirty to true
+        // if it is a read, make sure dirty is set to false
+        if(write)
+        {
+            cacheLine[indexToReplace].setDirty();
+        }
+        else
+        {
+            cacheLine[indexToReplace].resetDirty();
+        }
     }
 
     // take care of all LRU counters
