@@ -71,7 +71,7 @@ int main(int argc, char** argv)
         }
     }
     //print summary
-    cout << "cache size: " << numsets << endl;
+    cout << "cache size: " << args->at("-s") <<  endl;
     cout << "block size: " << args->at("-b") << endl;
     cout << "associativity: " << args->at("-a") << endl;
     cout << "total loads: " << cache.getMemoryReadCount() << endl;
