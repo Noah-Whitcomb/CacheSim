@@ -51,7 +51,7 @@ bool CacheSet::readByte(int tag, int offset)
 {
     // if there is a hit, return true
     // if not, load byte into the least recently used block
-    int indexofHit;
+    int indexofHit = 0;
     if(hit(tag, indexofHit))
     {
         // reset the LRU counter of the recently hit cacheEntry

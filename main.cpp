@@ -40,7 +40,10 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    Cache cache = Cache(args->at("-s"), args->at("-a"), args->at("-b"));
+    int numlines = args->at("-a")*args->at("-b"); // units are bytes
+    int numsets = args->at("-s")/numlines; // no units
+
+    Cache cache = Cache(numsets, args->at("-a"), args->at("-b"));
 
     ifstream file;
     file.open(INPUT_PATH);
