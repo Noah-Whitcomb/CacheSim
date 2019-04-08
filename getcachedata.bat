@@ -1,5 +1,5 @@
 echo off
-cd C:\Users\crisc\CLionProjects\CacheSimulator\CacheSim\cmake-build-debug
+cd C:\Users\...\CLionProjects\CacheSimulator\CacheSim\cmake-build-debug
 
 break>C:\python_scripts\graph1data.txt
 break>C:\python_scripts\graph2data.txt
